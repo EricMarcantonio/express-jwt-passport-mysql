@@ -25,7 +25,7 @@ export const createUser = async (user: User) => {
 export const getAllUsers = async () => {
     return await UserModel.findAll();
 };
-export const getUser = async (obj: User) => {
+export const getUser = async (obj: User ) => {
     return await UserModel.findOne({
         where: obj as any
     });

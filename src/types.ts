@@ -1,8 +1,11 @@
 import express from "express";
 
-export interface User {
-    uname: string,
-    password: string
+export interface User{
+    id?: number
+    uname?: string,
+    password?: string,
+    createdAt?: string,
+    updatedAt?: string
 }
 
 
