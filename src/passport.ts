@@ -8,7 +8,7 @@ const JwtStrategy = passportJWT.Strategy;
 
 const CookieExtractor: JwtFromRequestFunction = (req => {
     let token = null;
-    if (req && req.cookies) token = req.cookies['auth-token'];
+    if (req && req.cookies && req.cookies['auth-token']) token = req.cookies['auth-token'];
     return token;
 })
 
@@ -18,7 +18,11 @@ const jwtOptions = {
 }
 
 
-let strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
+let strategy = new JwtStrategy({
+    jwtFromRequest: ExtractJWT.fromExtractors([CookieExtractor]),
+    ignoreExpiration: false,
+    secretOrKey: `Ho5tIaFZRQEULisJZjlywA==`
+}, function(jwt_payload, next) {
     let user = getUser({ id: jwt_payload.id });
     if (user) {
         next(null, user);

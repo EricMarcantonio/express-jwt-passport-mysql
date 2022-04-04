@@ -10,6 +10,10 @@ export const HandleGetAllUsers = (req: Request, res: Response) => {
 
 export const HandleCreateUser = (req: CustomRequest<User>, res: Response) => {
     createUser({uname: req.body.uname, password: req.body.password}).then((user) => {
+        let u = user as User;
+        let payload = {id: u.id};
+        let token = jwt.sign(payload, jwtOptions.secretOrKey, {expiresIn: 20});
+        res.cookie("auth-token", token, {httpOnly: true})
         res.json(user)
     })
 }
@@ -29,9 +33,11 @@ export const HandleLogin = async (req: CustomRequest<User>, res: Response) => {
         } else {
             if (user.password === req.body.password) {
                 let payload = {id: user.id};
-                let token = jwt.sign(payload, jwtOptions.secretOrKey);
-                res.cookie("auth-token", token)
-                res.json({msg: 'ok', token: token});
+                let token = jwt.sign(payload, jwtOptions.secretOrKey, {
+                    expiresIn: 20
+                });
+                res.cookie("auth-token", token, {httpOnly: true})
+                res.json(user);
             } else {
                 res.status(401).json({msg: 'Password is incorrect'});
             }
