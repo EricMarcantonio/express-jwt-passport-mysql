@@ -43,4 +43,7 @@ export const HandleLogin = async (req: CustomRequest<User>, res: Response) => {
 
 export const HandleGetUser = async (req: CustomRequest<User>, res: Response) => {
     const user: User | undefined = await req.user;
+    if (user) {
+        res.json(user)
+    }
 }
